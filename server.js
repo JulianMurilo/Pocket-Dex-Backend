@@ -75,25 +75,22 @@ app.post("/get-pokemon-entry", (req, res) => {
   console.log(data.id);
 
   async function getPokemon() {
-    try {
-      // findOne will alwasy return one item or null
-      const pokemon = await pokemonModel.findById();
-
-      // send back score data and status ok
-      res.status(200).send({
-        message: "ok",
-        payload: pokemon,
-      });
-    } catch (e) {
-      // send back error mesage
-      res.status(400).send({
-        message: "error happened",
-        data: e,
-      });
-    }
-  }
-
-  getPokemon();
+        try {
+          // find will ALWAYS RETURN ARRAY
+          const allPokemon = await pokemonModel.find();
+          // send back pizza data and status ok
+          res.status(200).send({
+            message: "ok",
+            payload: allPokemon,
+          });
+        } catch (e) {
+          // send back error mesage
+          res.status(400).send({
+            message: "error happened",
+            data: e,
+          });
+        }
+      }
 });
 
 // define a POST request
