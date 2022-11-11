@@ -33,12 +33,13 @@ connectToDb();
  * Define what data our pizza object will hold
  */
 const pokemonSchema = new mongoose.Schema({
-  name: { type: Number, required: false }, // required =false
+  name: [],
   description: [],
-  img
+  type: [],
+  region: [],
 });
 
-const scoreModel = mongoose.model("score", pokemonSchema);
+const pokemonModel = mongoose.model("score", pokemonSchema);
 
 // middleware - does things for us that save time and code
 app.use(bodyParser.json());
@@ -46,15 +47,15 @@ app.use(bodyParser.json());
 app.use(cors())
 // define a GET request endpoint/API/requests
 // CRUD - READ
-app.get("/leaderboard", (req, res) => {
-  async function getAllScores() {
+app.get("/all-pokemon-entries", (req, res) => {
+  async function getAllPokemon() {
     try {
       // find will ALWAYS RETURN ARRAY
-      const allScores = await scoreModel.find();
+      const allPokemon = await pokemonModel.find();
       // send back pizza data and status ok
       res.status(200).send({
-        message: "Scoreboard",
-        payload: allScores,
+        message: "All Pokemon Found",
+        payload: allPokemon,
       });
     } catch (e) {
       // send back error mesage
@@ -65,23 +66,23 @@ app.get("/leaderboard", (req, res) => {
     }
   }
 
-  getAllScores();
+  getAllPokemon();
 });
 
-app.post("/get-score", (req, res) => {
+app.post("/get-pokemon-entry", (req, res) => {
   const data = req.body;
 
   console.log(data.id);
 
-  async function getScore() {
+  async function getPokemon() {
     try {
       // findOne will alwasy return one item or null
-      const score = await scoreModel.findById();
+      const pokemon = await pokemonModel.findById();
 
       // send back score data and status ok
       res.status(200).send({
         message: "ok",
-        payload: score,
+        payload: pokemon,
       });
     } catch (e) {
       // send back error mesage
@@ -92,27 +93,29 @@ app.post("/get-score", (req, res) => {
     }
   }
 
-  getScore();
+  getPokemon();
 });
 
 // define a POST request
 // CRUD - C
-app.post("/add-score", (request, response) => {
+app.post("/add-pokemon-entry", (request, response) => {
   // grab the new score info
   const data = request.body;
 
-  async function makeScore() {
+  async function makePokemon() {
     try {
       // create a new score in the database
-      const newScore = await scoreModel.create({
-        score: data.score,
+      const newPokemon = await pokemonModel.create({
         name: data.name,
+        description: data.description,
+        type: data.type,
+        region: data.region,
       });
 
       // send back pizza data and status ok
       response.status(200).send({
         message: "new score",
-        payload: newScore,
+        payload: newPokemon,
       });
     } catch (e) {
       console.log(e);
@@ -124,17 +127,17 @@ app.post("/add-score", (request, response) => {
     }
   }
 
-  makeScore();
+  makePokemon();
 });
 
-app.delete("/delete-score", (req, res) => {
+app.delete("/delete-pokemon-entry", (req, res) => {
 
   const data = req.body;
-  async function deleteScore() {
+  async function deletePokemon() {
     try {
-      scoreModel.findByIdAndDelete({ _id: data._id }).then(() => {
+      pokemonModel.findByIdAndDelete({ _id: data._id }).then(() => {
         res.status(200).send({
-          msg: 'Deleted Score'
+          msg: 'Deleted Pokemon Entry successfully'
         })
       })
     } catch (e) {
@@ -146,17 +149,17 @@ app.delete("/delete-score", (req, res) => {
       });
     }
   }
-  deleteScore();
+  deletePokemon();
 });
 
-app.put("/update-score", (request, response) => {
+app.put("/update-pokemon-entry", (request, response) => {
 
   const data = req.body;
-  async function updateScore() {
+  async function updatePokemon() {
     try {
-      scoreModel.findByIdAndUpdate({ _id: req.params._id }, data).then(() => {
+      pokemonModel.findByIdAndUpdate({ _id: req.params._id }, data).then(() => {
         res.status(200).send({
-          msg: 'Updated Score'
+          msg: 'Updated Pokemon Entry successfully'
         })
       })
     } catch (e) {
@@ -168,7 +171,7 @@ app.put("/update-score", (request, response) => {
       });
     }
   }
-  updateScore();
+  updatePokemon();
 });
 
 
