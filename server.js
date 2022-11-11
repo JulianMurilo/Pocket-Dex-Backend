@@ -152,25 +152,27 @@ app.delete("/delete-pokemon-entry", (req, res) => {
   deletePokemon();
 });
 
-app.put("/update-pokemon-entry", (request, response) => {
-
-  const data = req.body;
-  async function updatePokemon() {
-    try {
-      pokemonModel.findByIdAndUpdate({ _id: req.params._id }, data).then(() => {
+app.put("/update-pokemon-entry", (req, res) => {
+    const data = req.body;
+ 
+    async function updatePokemon() {
+      try {
+        // findByIdAndUpdate will find the score by the id and update said score with the given values
+        const updatedPokemon = await pokemonModel.findByIdAndUpdate(data._id, {name: data.name, description: data.description, type: data.type, region: data.region});
+  
+        // send back the updated data and status ok
         res.status(200).send({
-          msg: 'Updated Pokemon Entry successfully'
-        })
-      })
-    } catch (e) {
-      console.log(e);
-      // send back error mesage
-      response.status(400).send({
-        message: "error happened",
-        data: e,
-      });
+          message: "ok",
+          payload: updatedPokemon,
+        });
+      } catch (e) {
+        // send back error mesage
+        res.status(400).send({
+          message: "error happened",
+          data: e,
+        });
+      }
     }
-  }
   updatePokemon();
 });
 
