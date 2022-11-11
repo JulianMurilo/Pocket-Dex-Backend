@@ -17,7 +17,7 @@ async function connectToDb() {
   try {
     // this line of code stop everything until its
     await mongoose.connect(
-      ""
+      "mongodb+srv://jeff:jeff@cluster0.3jkcj3n.mongodb.net/?retryWrites=true&w=majority"
     );
     console.log("we connected");
   } catch (error) {
@@ -39,7 +39,7 @@ const pokemonSchema = new mongoose.Schema({
   region: [],
 });
 
-const pokemonModel = mongoose.model("score", pokemonSchema);
+const pokemonModel = mongoose.model("pokemon", pokemonSchema);
 
 // middleware - does things for us that save time and code
 app.use(bodyParser.json());
