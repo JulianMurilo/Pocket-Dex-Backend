@@ -17,7 +17,7 @@ async function connectToDb() {
   try {
     // this line of code stop everything until its
     await mongoose.connect(
-      ""
+      "mongodb+srv://jeff:jeff@cluster0.3jkcj3n.mongodb.net/?retryWrites=true&w=majority"
     );
     console.log("we connected");
   } catch (error) {
@@ -33,13 +33,13 @@ connectToDb();
  * Define what data our pizza object will hold
  */
 const pokemonSchema = new mongoose.Schema({
-  name: [],
-  description: [],
-  type: [],
-  region: [],
+  name: { type: Sting, required: true },
+  description: { type: Sting, required: true },
+  type: { type: Sting, required: true },
+  region: { type: Sting, required: true }
 });
 
-const pokemonModel = mongoose.model("score", pokemonSchema);
+const pokemonModel = mongoose.model("pokemon", pokemonSchema);
 
 // middleware - does things for us that save time and code
 app.use(bodyParser.json());
@@ -69,28 +69,30 @@ app.get("/all-pokemon-entries", (req, res) => {
   getAllPokemon();
 });
 
-app.post("/get-pokemon-entry", (req, res) => {
+app.post("/get-selected-id", (req, res) => {
   const data = req.body;
 
   console.log(data.id);
 
   async function getPokemon() {
-        try {
-          // find will ALWAYS RETURN ARRAY
-          const allPokemon = await pokemonModel.find();
-          // send back pizza data and status ok
-          res.status(200).send({
-            message: "ok",
-            payload: allPokemon,
-          });
-        } catch (e) {
-          // send back error mesage
-          res.status(400).send({
-            message: "error happened",
-            data: e,
-          });
-        }
-      }
+    try {
+      // findOne will alwasy return one item or null
+      const payload = await pokemonModel.findOne(data._id);
+
+      // send back poke data and status ok
+      res.status(200).send({
+        message: "ok",
+        payload: payload,
+      });
+    } catch (e) {
+      res.status(400).send({
+        message: "error happened",
+        data: e,
+      });
+    }
+  }
+
+  getPokemon();
 });
 
 // define a POST request
