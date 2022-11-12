@@ -17,7 +17,7 @@ async function connectToDb() {
   try {
     // this line of code stop everything until its
     await mongoose.connect(
-      ""
+      "mongodb+srv://jdawg:LMicBE0txfMWsQne@julian-cluster.qliyi5o.mongodb.net/?retryWrites=true&w=majority"
     );
     console.log("we connected");
   } catch (error) {
@@ -33,10 +33,10 @@ connectToDb();
  * Define what data our pizza object will hold
  */
 const pokemonSchema = new mongoose.Schema({
-  name: [],
-  description: [],
-  type: [],
-  region: [],
+  name: String,
+  description: String,
+  type: String,
+  region: String,
 });
 
 const pokemonModel = mongoose.model("score", pokemonSchema);
@@ -91,6 +91,7 @@ app.post("/get-pokemon-entry", (req, res) => {
           });
         }
       }
+      getPokemon()
 });
 
 // define a POST request
