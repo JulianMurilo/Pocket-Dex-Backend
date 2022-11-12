@@ -1,5 +1,5 @@
 // this port for our sever
-const PORT = 3001;
+const PORT = 3000;
 // import express framework
 const express = require("express");
 // create instance of express so we can define our routes
@@ -112,7 +112,7 @@ app.post("/add-pokemon-entry", (request, response) => {
 
       // send back pizza data and status ok
       response.status(200).send({
-        message: "new score",
+        message: "New Pokemon Discovered",
         payload: newPokemon,
       });
     } catch (e) {
