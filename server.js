@@ -33,10 +33,10 @@ connectToDb();
  * Define what data our pizza object will hold
  */
 const pokemonSchema = new mongoose.Schema({
-  name: { type: Sting, required: true },
-  description: { type: Sting, required: true },
-  type: { type: Sting, required: true },
-  region: { type: Sting, required: true }
+  name: { type: String, required: true },
+  description: { type: String, required: true },
+  type: { type: String, required: true },
+  region: { type: String, required: true }
 });
 
 const pokemonModel = mongoose.model("pokemon", pokemonSchema);
@@ -72,13 +72,13 @@ app.get("/all-pokemon-entries", (req, res) => {
 app.post("/get-selected-id", (req, res) => {
   const data = req.body;
 
-  console.log(data.id);
+  console.log(data);
 
   async function getPokemon() {
     try {
       // findOne will alwasy return one item or null
-      const payload = await pokemonModel.findOne(data._id);
-
+      const payload = await pokemonModel.findOne(data.data);
+      console.log(payload)
       // send back poke data and status ok
       res.status(200).send({
         message: "ok",
