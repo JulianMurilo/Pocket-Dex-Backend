@@ -33,6 +33,7 @@ connectToDb();
  * Define what data our pizza object will hold
  */
 const pokemonSchema = new mongoose.Schema({
+  pokemon: { type: String, required: true },
   name: { type: String, required: true },
   description: { type: String, required: true },
   type: { type: String, required: true },
@@ -105,6 +106,7 @@ app.post("/add-pokemon-entry", (request, response) => {
     try {
       // create a new score in the database
       const newPokemon = await pokemonModel.create({
+        pokemon: data.pokemon,
         name: data.name,
         description: data.description,
         type: data.type,
@@ -157,7 +159,7 @@ app.put("/update-pokemon-entry", (req, res) => {
     async function updatePokemon() {
       try {
         // findByIdAndUpdate will find the score by the id and update said score with the given values
-        const updatedPokemon = await pokemonModel.findByIdAndUpdate(data._id, {name: data.name, description: data.description, type: data.type, region: data.region});
+        const updatedPokemon = await pokemonModel.findByIdAndUpdate(data._id, {pokemon: data.pokemon, name: data.name, description: data.description, type: data.type, region: data.region});
   
         // send back the updated data and status ok
         res.status(200).send({
